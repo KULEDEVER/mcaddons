@@ -1,0 +1,24 @@
+{
+	"format_version": 2,
+	"header": {
+		"name": "Vehicles",
+		"description": "Vehicles Resource Pack",
+		"uuid": "4938d757-baef-013f-4e69-6c65b5c15464",
+		"version": [1, 0, 0],
+		"min_engine_version": [1, 16, 0]
+	},
+	"metadata": {
+		"authors": ["KULEDEVER"],
+		"generated_with": {
+			"blockbench_entity_wizard": ["1.8.3"]
+		}
+	},
+	"modules": [
+		{
+			"description": "Vehicles",
+			"type": "resources",
+			"uuid": "78180398-41a6-88ae-071f-2e7d4ee8343c",
+			"version": [1, 0, 0]
+		}
+	]
+}

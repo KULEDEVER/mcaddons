@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repository Directory</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background: #f6f8fa; color: #24292e; }
+        h1 { border-bottom: 1px solid #eaecef; padding-bottom: 10px; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 8px 12px; margin: 4px 0; background: white; border: 1px solid #e1e4e8; border-radius: 6px; display: flex; align-items: center; }
+        .folder { font-weight: bold; color: #0366d6; }
+        .file a { color: #24292e; text-decoration: none; }
+        .file a:hover { color: #0366d6; text-decoration: underline; }
+        .icon { margin-right: 8px; }
+    </style>
+</head>
+<body>
+
+    <h1 id="repo-title">Repository Files</h1>
+    <ul id="file-list">Loading repository contents...</ul>
+
+    <script>
+        // CONFIGURATION: Change these to match your repository
+        const USERNAME = 'KULEDEVER';
+        const REPO = 'mcaddons';
+        const BRANCH = 'main'; // Change to 'master' if your default branch uses it
+
+        // GitHub API URL to fetch the complete repository tree recursively
+        const apiURL = `https://api.github.com/repos/${USERNAME}/${REPO}/git/trees/${BRANCH}?recursive=1`;
+
+        async function fetchRepoContents() {
+            try {
+                const response = await fetch(apiURL);
+                if (!response.ok) throw new Error('Failed to fetch data from GitHub API');
+                
+                const data = await response.json();
+                const listElement = document.getElementById('file-list');
+                listElement.innerHTML = ''; // Clear loading text
+                
+                document.getElementById('repo-title').innerText = `${REPO} Directory`;
+
+                // Filter out system files you don't want to show (like .gitignore or index.html itself)
+                const items = data.tree.filter(item => item.path !== 'index.html');
+
+                if (items.length === 0) {
+                    listElement.innerHTML = '<li>The repository is empty.</li>';
+                    return;
+                }
+
+                items.forEach(item => {
+                    const li = document.createElement('li');
+                    
+                    if (item.type === 'tree') {
+                        // It's a folder
+                        li.className = 'folder';
+                        li.innerHTML = `<span class="icon">📁</span> ${item.path}/`;
+                    } else if (item.type === 'blob') {
+                        // It's a file - link directly to the GitHub Pages URL path
+                        li.className = 'file';
+                        const fileURL = `https://${USERNAME}.github.io/${REPO}/${item.path}`;
+                        li.innerHTML = `<span class="icon">📄</span> <a href="${fileURL}" target="_blank">${item.path}</a>`;
+                    }
+                    
+                    listElement.appendChild(li);
+                });
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('file-list').innerHTML = `<li style="color: red;">Error loading repository structure. Check your configuration settings.</li>`;
+            }
+        }
+
+        fetchRepoContents();
+    </script>
+</body>
+</html>

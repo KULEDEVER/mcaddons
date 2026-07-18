@@ -1,0 +1,4 @@
+entity.myname:car.name=Car
+item.spawn_egg.entity.myname:car.name=Spawn Car
+entity.myname:normal_car.name=Normal Car
+item.spawn_egg.entity.myname:normal_car.name=Spawn Normal Car
